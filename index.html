@@ -3,262 +3,431 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scopus Data Analysis Dashboard (300 Items Per File)</title>
-    <!-- Chart.js CDN -->
+    <title>Advanced Domain Clustering Analysis Dashboard - Scopus AI Data</title>
+    <!-- Chart.js CDN & FontAwesome -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --accent-color: #3498db;
-            --bg-color: #f8f9fa;
+            --primary-dark: #1e293b;
+            --primary-accent: #3b82f6;
+            --secondary-accent: #10b981;
+            --purple-accent: #8b5cf6;
+            --orange-accent: #f59e0b;
+            --pink-accent: #ec4899;
+            --bg-main: #f1f5f9;
             --card-bg: #ffffff;
-            --text-color: #333333;
-            --border-color: #e9ecef;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
             margin: 0;
-            padding: 20px;
+            padding: 24px;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1300px;
             margin: 0 auto;
         }
 
         header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-
-        h1 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            color: #666;
-            font-size: 1.05em;
-        }
-
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 28px 36px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
             gap: 20px;
-            margin-bottom: 30px;
         }
 
-        .kpi-card {
+        .header-title h1 {
+            margin: 0 0 8px 0;
+            font-size: 1.8rem;
+            letter-spacing: -0.5px;
+        }
+
+        .header-title p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        .dataset-tag {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255,255,255,0.15);
+            display: flex;
+            gap: 12px;
+        }
+
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
             background: var(--card-bg);
             padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            text-align: center;
-            border-top: 4px solid var(--accent-color);
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .kpi-card.file2 {
-            border-top-color: #2ecc71;
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08);
         }
 
-        .kpi-value {
-            font-size: 2em;
-            font-weight: bold;
-            color: var(--primary-color);
-            margin: 10px 0;
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
         }
 
-        .kpi-label {
-            color: #7f8c8d;
-            font-size: 0.9em;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .stat-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
         }
 
-        .dashboard-grid {
+        .stat-val {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .stat-lbl {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .grid-2col {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(580px, 1fr));
+            gap: 24px;
+            margin-bottom: 28px;
         }
 
-        @media (max-width: 600px) {
-            .dashboard-grid {
+        @media (max-width: 650px) {
+            .grid-2col {
                 grid-template-columns: 1fr;
             }
         }
 
         .chart-card {
             background: var(--card-bg);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
         }
 
-        .chart-card h3 {
-            margin-top: 0;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
-            font-size: 1.1em;
+        .chart-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .chart-container {
+        .chart-card-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chart-box {
             position: relative;
-            height: 320px;
+            height: 340px;
             width: 100%;
         }
 
-        .data-table {
+        .domain-table-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            margin-bottom: 28px;
+        }
+
+        .custom-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 15px;
         }
 
-        .data-table th, .data-table td {
-            padding: 12px;
+        .custom-table th {
+            background: #f8fafc;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 12px 16px;
             text-align: left;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .custom-table td {
+            padding: 14px 16px;
             border-bottom: 1px solid var(--border-color);
+            font-size: 0.92rem;
+            color: var(--text-dark);
         }
 
-        .data-table th {
-            background-color: #f1f3f5;
-            color: var(--primary-color);
+        .custom-table tbody tr:hover {
+            background-color: #f8fafc;
         }
 
-        .badge {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.85em;
-            font-weight: bold;
+        .domain-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            display: inline-block;
         }
 
-        .badge-f1 { background-color: #e8f4f8; color: #2980b9; }
-        .badge-f2 { background-color: #eafaf1; color: #27ae60; }
+        .bg-edu { background: #eff6ff; color: #2563eb; }
+        .bg-med { background: #f0fdf4; color: #16a34a; }
+        .bg-biz { background: #fef3c7; color: #d97706; }
+        .bg-tech { background: #f3e8ff; color: #9333ea; }
+        .bg-eng { background: #ecfeff; color: #0891b2; }
+        .bg-eth { background: #fce7f3; color: #db2777; }
+
+        .progress-bar-bg {
+            background: #e2e8f0;
+            border-radius: 10px;
+            height: 8px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>แดชบอร์ดวิเคราะห์ข้อมูล Scopus (เปรียบเทียบ 2 ไฟล์ - ไฟล์ละ 300 รายการ)</h1>
-        <p class="subtitle">การวิเคราะห์ผลงานวิชาการและแนวโน้มด้าน Artificial Intelligence & Technology (2025)</p>
+        <div class="header-title">
+            <h1><i class="fa-solid fa-chart-pie" style="color: #3b82f6;"></i> การจัดกลุ่มงานวิจัย AI ตามโดเมนประยุกต์ (Domain Clustering Analysis)</h1>
+            <p>วิเคราะห์เปรียบเทียบสถิติและผลกระทบของผลงานวิชาการ 600 รายการ (แบ่งไฟล์ละ 300 รายการ)</p>
+        </div>
+        <div class="dataset-tag">
+            <span><i class="fa-solid fa-file-csv"></i> File 1: 300 Items</span>
+            <span>|</span>
+            <span><i class="fa-solid fa-file-csv"></i> File 2: 300 Items</span>
+        </div>
     </header>
 
-    <!-- Key Performance Indicators -->
-    <div class="kpi-grid">
-        <div class="kpi-card">
-            <div class="kpi-label">ไฟล์ที่ 1: จำนวนทั้งหมด</div>
-            <div class="kpi-value">300</div>
-            <span class="badge badge-f1">db2a7c24</span>
+    <!-- Key Metrics Summary -->
+    <div class="stats-summary">
+        <div class="stat-card">
+            <div class="stat-header">
+                <span class="stat-lbl">กลุ่มงานวิจัยที่เติบโตสูงสุด</span>
+                <div class="stat-icon" style="background: #eff6ff; color: #3b82f6;"><i class="fa-solid fa-graduation-cap"></i></div>
+            </div>
+            <div class="stat-val">33.7%</div>
+            <div style="font-size: 0.8rem; color: #3b82f6; font-weight: 600;">Education & Pedagogy (202 บทความ)</div>
         </div>
-        <div class="kpi-card file2">
-            <div class="kpi-label">ไฟล์ที่ 2: จำนวนทั้งหมด</div>
-            <div class="kpi-value">300</div>
-            <span class="badge badge-f2">a945cc8e</span>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <span class="stat-lbl">กลุ่มที่มี Citation เฉลี่ยสูงสุด</span>
+                <div class="stat-icon" style="background: #f0fdf4; color: #10b981;"><i class="fa-solid fa-heart-pulse"></i></div>
+            </div>
+            <div class="stat-val">10.7</div>
+            <div style="font-size: 0.8rem; color: #10b981; font-weight: 600;">Healthcare (อ้างอิงเฉลี่ย/เรื่อง)</div>
         </div>
-        <div class="kpi-card">
-            <div class="kpi-label">การเข้าถึง Open Access (ไฟล์ 1 / ไฟล์ 2)</div>
-            <div class="kpi-value">70.7% / 81.3%</div>
-            <span style="color:#7f8c8d; font-size:0.85em;">รวม 212 / 244 บทความ</span>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <span class="stat-lbl">กลุ่มวิจัยธุรกิจ & โลจิสติกส์</span>
+                <div class="stat-icon" style="background: #fef3c7; color: #f59e0b;"><i class="fa-solid fa-chart-line"></i></div>
+            </div>
+            <div class="stat-val">101</div>
+            <div style="font-size: 0.8rem; color: #f59e0b; font-weight: 600;">Business & Logistics (16.8%)</div>
         </div>
-        <div class="kpi-card file2">
-            <div class="kpi-label">การอ้างอิงเฉลี่ย (ไฟล์ 1 / ไฟล์ 2)</div>
-            <div class="kpi-value">1.05 / 7.91</div>
-            <span style="color:#7f8c8d; font-size:0.85em;">Citations per paper</span>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <span class="stat-lbl">สัดส่วน Open Access รวม</span>
+                <div class="stat-icon" style="background: #f3e8ff; color: #8b5cf6;"><i class="fa-solid fa-lock-open"></i></div>
+            </div>
+            <div class="stat-val">76.0%</div>
+            <div style="font-size: 0.8rem; color: #8b5cf6; font-weight: 600;">456 จาก 600 บทความ</div>
         </div>
     </div>
 
-    <!-- Charts Grid -->
-    <div class="dashboard-grid">
-        <!-- Chart 1: Document Types Comparison -->
+    <!-- Charts Row 1 -->
+    <div class="grid-2col">
+        <!-- Chart 1: Domain Distribution Comparison -->
         <div class="chart-card">
-            <h3>1. สัดส่วนประเภทเอกสาร (Document Type Comparison)</h3>
-            <div class="chart-container">
-                <canvas id="docTypeChart"></canvas>
+            <div class="chart-card-header">
+                <h3><i class="fa-solid fa-layer-group" style="color: #3b82f6;"></i> การกระจายตัวของกลุ่มวิจัย (Domain Distribution: File 1 vs File 2)</h3>
+            </div>
+            <div class="chart-box">
+                <canvas id="domainCompareChart"></canvas>
             </div>
         </div>
 
-        <!-- Chart 2: Open Access Status -->
+        <!-- Chart 2: Total Domain Share Radar -->
         <div class="chart-card">
-            <h3>2. สัดส่วนการเข้าถึงบทความ (Open Access Availability)</h3>
-            <div class="chart-container">
-                <canvas id="oaChart"></canvas>
+            <div class="chart-card-header">
+                <h3><i class="fa-solid fa-compass" style="color: #8b5cf6;"></i> สัดส่วนความสนใจวิจัยภาพรวม (Overall Research Domain Focus)</h3>
             </div>
-        </div>
-
-        <!-- Chart 3: Top Journals File 1 -->
-        <div class="chart-card">
-            <h3>3. วารสารยอดนิยม - ไฟล์ที่ 1 (N = 300)</h3>
-            <div class="chart-container">
-                <canvas id="topJournalFile1"></canvas>
-            </div>
-        </div>
-
-        <!-- Chart 4: Top Journals File 2 -->
-        <div class="chart-card">
-            <h3>4. วารสารยอดนิยม - ไฟล์ที่ 2 (N = 300)</h3>
-            <div class="chart-container">
-                <canvas id="topJournalFile2"></canvas>
+            <div class="chart-box">
+                <canvas id="domainRadarChart"></canvas>
             </div>
         </div>
     </div>
 
-    <!-- Top Cited Papers Table Comparison -->
-    <div class="chart-card" style="margin-bottom: 30px;">
-        <h3>5. บทความที่ได้รับการอ้างอิงสูงสุด (Top Cited Publications Comparison)</h3>
-        <table class="data-table">
+    <!-- Charts Row 2 -->
+    <div class="grid-2col">
+        <!-- Chart 3: Mean Citation Impact by Domain (File 2) -->
+        <div class="chart-card">
+            <div class="chart-card-header">
+                <h3><i class="fa-solid fa-quote-right" style="color: #10b981;"></i> ผลกระทบการอ้างอิงเฉลี่ยต่อกลุ่มวิจัย (Mean Citation Impact - File 2)</h3>
+            </div>
+            <div class="chart-box">
+                <canvas id="citationDomainChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Chart 4: Sub-topic Breakdown inside Education & Healthcare -->
+        <div class="chart-card">
+            <div class="chart-card-header">
+                <h3><i class="fa-solid fa-tags" style="color: #f59e0b;"></i> คำสำคัญยอดนิยมแบ่งตามโดเมนหลัก (Top Keywords Breakdown)</h3>
+            </div>
+            <div class="chart-box">
+                <canvas id="keywordClusterChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Structured Grouping Data Table -->
+    <div class="domain-table-card">
+        <div class="chart-card-header">
+            <h3><i class="fa-solid fa-table" style="color: #0f172a;"></i> สรุปสถิติเชิงลึกรายกลุ่มโดเมนการวิจัย (Comprehensive Domain Matrix)</h3>
+        </div>
+        <table class="custom-table">
             <thead>
                 <tr>
-                    <th>ไฟล์</th>
-                    <th>ชื่อบทความ (Title)</th>
-                    <th>วารสาร (Source Title)</th>
-                    <th>การอ้างอิง (Citations)</th>
+                    <th>กลุ่มโดเมน (Research Domain Cluster)</th>
+                    <th>จำนวนเรื่อง (ไฟล์ 1)</th>
+                    <th>จำนวนเรื่อง (ไฟล์ 2)</th>
+                    <th>รวมทั้งหมด (600 เรื่อง)</th>
+                    <th>สัดส่วน (%)</th>
+                    <th>อัตราการอ้างอิงเฉลี่ย (File 2 Citations/Paper)</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td><span class="badge badge-f2">ไฟล์ที่ 2</span></td>
-                    <td>Generative Artificial Intelligence Use in Healthcare: Opportunities for Clinical Excellence...</td>
-                    <td>Journal of Medical Systems</td>
-                    <td><strong>115</strong></td>
+                    <td><span class="domain-badge bg-edu"><i class="fa-solid fa-graduation-cap"></i> Education & Pedagogy</span></td>
+                    <td>106</td>
+                    <td>96</td>
+                    <td><strong>202</strong></td>
+                    <td>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span>33.7%</span>
+                            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:33.7%; background:#3b82f6;"></div></div>
+                        </div>
+                    </td>
+                    <td><strong style="color:#10b981;">10.78</strong></td>
                 </tr>
                 <tr>
-                    <td><span class="badge badge-f2">ไฟล์ที่ 2</span></td>
-                    <td>The effects of generative AI on collaborative problem-solving and team creativity...</td>
-                    <td>Int. Journal of Educational Technology in Higher Ed.</td>
-                    <td><strong>97</strong></td>
+                    <td><span class="domain-badge bg-tech"><i class="fa-solid fa-microchip"></i> Core AI, ML & Computer Science</span></td>
+                    <td>71</td>
+                    <td>52</td>
+                    <td><strong>123</strong></td>
+                    <td>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span>20.5%</span>
+                            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:20.5%; background:#8b5cf6;"></div></div>
+                        </div>
+                    </td>
+                    <td><strong>5.56</strong></td>
                 </tr>
                 <tr>
-                    <td><span class="badge badge-f2">ไฟล์ที่ 2</span></td>
-                    <td>Exploring students’ AI literacy and its effects on their AI output quality...</td>
-                    <td>Smart Learning Environments</td>
-                    <td><strong>85</strong></td>
+                    <td><span class="domain-badge bg-biz"><i class="fa-solid fa-briefcase"></i> Business, Management & Logistics</span></td>
+                    <td>25</td>
+                    <td>76</td>
+                    <td><strong>101</strong></td>
+                    <td>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span>16.8%</span>
+                            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:16.8%; background:#f59e0b;"></div></div>
+                        </div>
+                    </td>
+                    <td><strong>5.36</strong></td>
                 </tr>
                 <tr>
-                    <td><span class="badge badge-f2">ไฟล์ที่ 2</span></td>
-                    <td>Factors influencing academic staff satisfaction and continuous usage of GenAI...</td>
-                    <td>Int. Journal of Educational Technology in Higher Ed.</td>
-                    <td><strong>79</strong></td>
+                    <td><span class="domain-badge bg-med"><i class="fa-solid fa-stethoscope"></i> Healthcare & Medicine</span></td>
+                    <td>65</td>
+                    <td>45</td>
+                    <td><strong>110</strong></td>
+                    <td>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span>18.3%</span>
+                            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:18.3%; background:#10b981;"></div></div>
+                        </div>
+                    </td>
+                    <td><strong style="color:#10b981;">10.67</strong></td>
                 </tr>
                 <tr>
-                    <td><span class="badge badge-f1">ไฟล์ที่ 1</span></td>
-                    <td>Generative AI and Literacy Development in Higher Education...</td>
-                    <td>Journal of Academic Literacy</td>
-                    <td><strong>23</strong></td>
+                    <td><span class="domain-badge bg-eng"><i class="fa-solid fa-gears"></i> Engineering & Industry</span></td>
+                    <td>21</td>
+                    <td>13</td>
+                    <td><strong>34</strong></td>
+                    <td>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span>5.7%</span>
+                            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:5.7%; background:#0891b2;"></div></div>
+                        </div>
+                    </td>
+                    <td><strong>3.08</strong></td>
                 </tr>
                 <tr>
-                    <td><span class="badge badge-f1">ไฟล์ที่ 1</span></td>
-                    <td>Personalized colorectal cancer risk assessment using machine learning...</td>
-                    <td>Cancer Informatics</td>
-                    <td><strong>19</strong></td>
+                    <td><span class="domain-badge bg-eth"><i class="fa-solid fa-scale-balanced"></i> Ethics, Policy & Social Impact</span></td>
+                    <td>12</td>
+                    <td>18</td>
+                    <td><strong>30</strong></td>
+                    <td>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span>5.0%</span>
+                            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:5.0%; background:#db2777;"></div></div>
+                        </div>
+                    </td>
+                    <td><strong>6.83</strong></td>
                 </tr>
             </tbody>
         </table>
@@ -266,109 +435,104 @@
 </div>
 
 <script>
-    // 1. Document Types Chart
-    const ctxDoc = document.getElementById('docTypeChart').getContext('2d');
-    new Chart(ctxDoc, {
+    // 1. Domain Distribution Chart
+    const ctxCompare = document.getElementById('domainCompareChart').getContext('2d');
+    new Chart(ctxCompare, {
         type: 'bar',
         data: {
-            labels: ['Article', 'Conference paper', 'Review', 'Note'],
+            labels: ['Education', 'Core AI & ML', 'Healthcare', 'Business & Logistics', 'Engineering', 'Ethics & Policy'],
             datasets: [
                 {
-                    label: 'ไฟล์ที่ 1 (300 รายการ)',
-                    data: [261, 39, 0, 0],
-                    backgroundColor: '#3498db'
+                    label: 'ไฟล์ที่ 1 (300 เรื่อง)',
+                    data: [106, 71, 65, 25, 21, 12],
+                    backgroundColor: '#3b82f6',
+                    borderRadius: 6
                 },
                 {
-                    label: 'ไฟล์ที่ 2 (300 รายการ)',
-                    data: [241, 13, 43, 3],
-                    backgroundColor: '#2ecc71'
+                    label: 'ไฟล์ที่ 2 (300 เรื่อง)',
+                    data: [96, 52, 45, 76, 13, 18],
+                    backgroundColor: '#10b981',
+                    borderRadius: 6
                 }
             ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            plugins: { legend: { position: 'top' } },
             scales: { y: { beginAtZero: true } }
         }
     });
 
-    // 2. Open Access Chart
-    const ctxOA = document.getElementById('oaChart').getContext('2d');
-    new Chart(ctxOA, {
-        type: 'bar',
+    // 2. Radar Domain Share Chart
+    const ctxRadar = document.getElementById('domainRadarChart').getContext('2d');
+    new Chart(ctxRadar, {
+        type: 'radar',
         data: {
-            labels: ['Open Access', 'Closed / Subscription'],
-            datasets: [
-                {
-                    label: 'ไฟล์ที่ 1 (300 รายการ)',
-                    data: [212, 88],
-                    backgroundColor: '#e74c3c'
-                },
-                {
-                    label: 'ไฟล์ที่ 2 (300 รายการ)',
-                    data: [244, 56],
-                    backgroundColor: '#9b59b6'
-                }
-            ]
+            labels: ['Education & Pedagogy', 'Core AI & Computer Science', 'Healthcare & Medicine', 'Business & Logistics', 'Engineering', 'Ethics & Policy'],
+            datasets: [{
+                label: 'สัดส่วนจำนวนงานวิจัยรวม (600 เรื่อง)',
+                data: [202, 123, 110, 101, 34, 30],
+                fill: true,
+                backgroundColor: 'rgba(139, 92, 246, 0.2)',
+                borderColor: '#8b5cf6',
+                pointBackgroundColor: '#8b5cf6',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#8b5cf6'
+            }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            scales: { y: { beginAtZero: true } }
+            elements: { line: { borderWidth: 3 } }
         }
     });
 
-    // 3. Top Journals File 1 Chart
-    const ctxJ1 = document.getElementById('topJournalFile1').getContext('2d');
-    new Chart(ctxJ1, {
+    // 3. Mean Citation Impact Chart
+    const ctxCite = document.getElementById('citationDomainChart').getContext('2d');
+    new Chart(ctxCite, {
         type: 'bar',
         data: {
-            labels: [
-                'ShodhKosh: Visual & Perf. Arts',
-                'IJACSA',
-                'Engineering Research Express',
-                'ICMHI 2025',
-                'Journal of Medical AI',
-                'Ocean Engineering'
-            ],
+            labels: ['Education & Pedagogy', 'Healthcare & Medicine', 'Ethics & Policy', 'Core AI & ML', 'Business & Logistics', 'Engineering'],
             datasets: [{
-                label: 'จำนวนบทความ',
-                data: [29, 27, 20, 15, 14, 11],
-                backgroundColor: '#3498db'
+                label: 'การอ้างอิงเฉลี่ยต่อบทความ (Citations / Paper)',
+                data: [10.78, 10.67, 6.83, 5.56, 5.36, 3.08],
+                backgroundColor: [
+                    '#3b82f6',
+                    '#10b981',
+                    '#db2777',
+                    '#8b5cf6',
+                    '#f59e0b',
+                    '#0891b2'
+                ],
+                borderRadius: 6
             }]
         },
         options: {
             indexAxis: 'y',
             responsive: true,
             maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
             scales: { x: { beginAtZero: true } }
         }
     });
 
-    // 4. Top Journals File 2 Chart
-    const ctxJ2 = document.getElementById('topJournalFile2').getContext('2d');
-    new Chart(ctxJ2, {
-        type: 'bar',
+    // 4. Keyword Clusters Chart
+    const ctxKw = document.getElementById('keywordClusterChart').getContext('2d');
+    new Chart(ctxKw, {
+        type: 'doughnut',
         data: {
-            labels: [
-                'Discover Artificial Intelligence',
-                'J. Theoretical & Applied Electronic Comm.',
-                'Sustainability (Switzerland)',
-                'Computers & Ed.: AI',
-                'Discover Computing',
-                'npj Digital Medicine'
-            ],
+            labels: ['Generative AI / ChatGPT', 'Higher Education / Students', 'Medical & ICU AI', 'Machine Learning / DL', 'Industry 4.0 & Warehouse', 'Ethics & Trust'],
             datasets: [{
-                label: 'จำนวนบทความ',
-                data: [30, 16, 15, 14, 10, 8],
-                backgroundColor: '#2ecc71'
+                data: [52, 40, 35, 63, 28, 23],
+                backgroundColor: ['#3b82f6', '#0891b2', '#10b981', '#8b5cf6', '#f59e0b', '#db2777']
             }]
         },
         options: {
-            indexAxis: 'y',
             responsive: true,
             maintainAspectRatio: false,
-            scales: { x: { beginAtZero: true } }
+            plugins: { legend: { position: 'right' } }
         }
     });
 </script>
