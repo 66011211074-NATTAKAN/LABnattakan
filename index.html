@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Domain Clustering Analysis Dashboard - Scopus AI Data</title>
+    <title>วิเคราะห์ Visualization ข้อมูลงานวิจัย AI & Digital Marketing</title>
     <!-- Chart.js CDN & FontAwesome -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -63,17 +63,18 @@
 
         .dataset-tag {
             background: rgba(255, 255, 255, 0.1);
-            padding: 8px 16px;
+            padding: 8px 18px;
             border-radius: 30px;
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             border: 1px solid rgba(255,255,255,0.15);
             display: flex;
             gap: 12px;
+            align-items: center;
         }
 
         .stats-summary {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 20px;
             margin-bottom: 28px;
         }
@@ -215,7 +216,7 @@
 
         .bg-edu { background: #eff6ff; color: #2563eb; }
         .bg-med { background: #f0fdf4; color: #16a34a; }
-        .bg-biz { background: #fef3c7; color: #d97706; }
+        .bg-mkt { background: #fef3c7; color: #d97706; }
         .bg-tech { background: #f3e8ff; color: #9333ea; }
         .bg-eng { background: #ecfeff; color: #0891b2; }
         .bg-eth { background: #fce7f3; color: #db2777; }
@@ -239,13 +240,12 @@
 <div class="container">
     <header>
         <div class="header-title">
-            <h1><i class="fa-solid fa-chart-pie" style="color: #3b82f6;"></i> การจัดกลุ่มงานวิจัย AI ตามโดเมนประยุกต์ (Domain Clustering Analysis)</h1>
-            <p>วิเคราะห์เปรียบเทียบสถิติและผลกระทบของผลงานวิชาการ 600 รายการ (แบ่งไฟล์ละ 300 รายการ)</p>
+            <h1><i class="fa-solid fa-chart-pie" style="color: #3b82f6;"></i> วิเคราะห์ Visualization ข้อมูลงานวิจัยด้าน AI & Digital Marketing</h1>
+            <p>วิเคราะห์ Visualization การจัดกลุ่มข้อมูลและแนวโน้มการประยุกต์ใช้ปัญญาประดิษฐ์ในด้านต่างๆ</p>
         </div>
         <div class="dataset-tag">
-            <span><i class="fa-solid fa-file-csv"></i> File 1: 300 Items</span>
-            <span>|</span>
-            <span><i class="fa-solid fa-file-csv"></i> File 2: 300 Items</span>
+            <i class="fa-solid fa-chart-line" style="color: #38bdf8;"></i>
+            <span>วิเคราะห์ Visualization แดชบอร์ดสรุปข้อมูล</span>
         </div>
     </header>
 
@@ -253,7 +253,7 @@
     <div class="stats-summary">
         <div class="stat-card">
             <div class="stat-header">
-                <span class="stat-lbl">กลุ่มงานวิจัยที่เติบโตสูงสุด</span>
+                <span class="stat-lbl">กลุ่มงานวิจัยหลัก</span>
                 <div class="stat-icon" style="background: #eff6ff; color: #3b82f6;"><i class="fa-solid fa-graduation-cap"></i></div>
             </div>
             <div class="stat-val">33.7%</div>
@@ -262,20 +262,20 @@
 
         <div class="stat-card">
             <div class="stat-header">
-                <span class="stat-lbl">กลุ่มที่มี Citation เฉลี่ยสูงสุด</span>
-                <div class="stat-icon" style="background: #f0fdf4; color: #10b981;"><i class="fa-solid fa-heart-pulse"></i></div>
+                <span class="stat-lbl">AI & Digital Marketing</span>
+                <div class="stat-icon" style="background: #fef3c7; color: #f59e0b;"><i class="fa-solid fa-bullhorn"></i></div>
             </div>
-            <div class="stat-val">10.7</div>
-            <div style="font-size: 0.8rem; color: #10b981; font-weight: 600;">Healthcare (อ้างอิงเฉลี่ย/เรื่อง)</div>
+            <div class="stat-val">101</div>
+            <div style="font-size: 0.8rem; color: #f59e0b; font-weight: 600;">การตลาดดิจิทัลและธุรกิจ (16.8%)</div>
         </div>
 
         <div class="stat-card">
             <div class="stat-header">
-                <span class="stat-lbl">กลุ่มวิจัยธุรกิจ & โลจิสติกส์</span>
-                <div class="stat-icon" style="background: #fef3c7; color: #f59e0b;"><i class="fa-solid fa-chart-line"></i></div>
+                <span class="stat-lbl">อัตราการอ้างอิงเฉลี่ยสูงสุด</span>
+                <div class="stat-icon" style="background: #f0fdf4; color: #10b981;"><i class="fa-solid fa-heart-pulse"></i></div>
             </div>
-            <div class="stat-val">101</div>
-            <div style="font-size: 0.8rem; color: #f59e0b; font-weight: 600;">Business & Logistics (16.8%)</div>
+            <div class="stat-val">10.7</div>
+            <div style="font-size: 0.8rem; color: #10b981; font-weight: 600;">Healthcare & Medical AI</div>
         </div>
 
         <div class="stat-card">
@@ -284,26 +284,26 @@
                 <div class="stat-icon" style="background: #f3e8ff; color: #8b5cf6;"><i class="fa-solid fa-lock-open"></i></div>
             </div>
             <div class="stat-val">76.0%</div>
-            <div style="font-size: 0.8rem; color: #8b5cf6; font-weight: 600;">456 จาก 600 บทความ</div>
+            <div style="font-size: 0.8rem; color: #8b5cf6; font-weight: 600;">456 บทความเปิดให้อ่านเสรี</div>
         </div>
     </div>
 
     <!-- Charts Row 1 -->
     <div class="grid-2col">
-        <!-- Chart 1: Domain Distribution Comparison -->
+        <!-- Chart 1: Domain Distribution -->
         <div class="chart-card">
             <div class="chart-card-header">
-                <h3><i class="fa-solid fa-layer-group" style="color: #3b82f6;"></i> การกระจายตัวของกลุ่มวิจัย (Domain Distribution: File 1 vs File 2)</h3>
+                <h3><i class="fa-solid fa-layer-group" style="color: #3b82f6;"></i> วิเคราะห์ Visualization การจัดกลุ่มข้อมูลตามสาขาประยุกต์</h3>
             </div>
             <div class="chart-box">
-                <canvas id="domainCompareChart"></canvas>
+                <canvas id="domainDistributionChart"></canvas>
             </div>
         </div>
 
         <!-- Chart 2: Total Domain Share Radar -->
         <div class="chart-card">
             <div class="chart-card-header">
-                <h3><i class="fa-solid fa-compass" style="color: #8b5cf6;"></i> สัดส่วนความสนใจวิจัยภาพรวม (Overall Research Domain Focus)</h3>
+                <h3><i class="fa-solid fa-compass" style="color: #8b5cf6;"></i> วิเคราะห์ Visualization สัดส่วนความสนใจงานวิจัย AI ภาพรวม</h3>
             </div>
             <div class="chart-box">
                 <canvas id="domainRadarChart"></canvas>
@@ -313,20 +313,20 @@
 
     <!-- Charts Row 2 -->
     <div class="grid-2col">
-        <!-- Chart 3: Mean Citation Impact by Domain (File 2) -->
+        <!-- Chart 3: Mean Citation Impact by Domain -->
         <div class="chart-card">
             <div class="chart-card-header">
-                <h3><i class="fa-solid fa-quote-right" style="color: #10b981;"></i> ผลกระทบการอ้างอิงเฉลี่ยต่อกลุ่มวิจัย (Mean Citation Impact - File 2)</h3>
+                <h3><i class="fa-solid fa-quote-right" style="color: #10b981;"></i> วิเคราะห์ Visualization ผลกระทบการอ้างอิงเฉลี่ยรายกลุ่ม</h3>
             </div>
             <div class="chart-box">
                 <canvas id="citationDomainChart"></canvas>
             </div>
         </div>
 
-        <!-- Chart 4: Sub-topic Breakdown inside Education & Healthcare -->
+        <!-- Chart 4: Sub-topic Breakdown -->
         <div class="chart-card">
             <div class="chart-card-header">
-                <h3><i class="fa-solid fa-tags" style="color: #f59e0b;"></i> คำสำคัญยอดนิยมแบ่งตามโดเมนหลัก (Top Keywords Breakdown)</h3>
+                <h3><i class="fa-solid fa-tags" style="color: #f59e0b;"></i> วิเคราะห์ Visualization คำสำคัญยอดนิยม (Top Keywords)</h3>
             </div>
             <div class="chart-box">
                 <canvas id="keywordClusterChart"></canvas>
@@ -337,24 +337,21 @@
     <!-- Structured Grouping Data Table -->
     <div class="domain-table-card">
         <div class="chart-card-header">
-            <h3><i class="fa-solid fa-table" style="color: #0f172a;"></i> สรุปสถิติเชิงลึกรายกลุ่มโดเมนการวิจัย (Comprehensive Domain Matrix)</h3>
+            <h3><i class="fa-solid fa-table" style="color: #0f172a;"></i> สรุปผลวิเคราะห์ Visualization สถิติจำแนกตามโดเมนงานวิจัย</h3>
         </div>
         <table class="custom-table">
             <thead>
                 <tr>
-                    <th>กลุ่มโดเมน (Research Domain Cluster)</th>
-                    <th>จำนวนเรื่อง (ไฟล์ 1)</th>
-                    <th>จำนวนเรื่อง (ไฟล์ 2)</th>
-                    <th>รวมทั้งหมด (600 เรื่อง)</th>
+                    <th>กลุ่มโดเมนการประยุกต์ใช้งาน (Research Cluster)</th>
+                    <th>จำนวนบทความ</th>
                     <th>สัดส่วน (%)</th>
-                    <th>อัตราการอ้างอิงเฉลี่ย (File 2 Citations/Paper)</th>
+                    <th>อัตราการอ้างอิงเฉลี่ย (Citations / Paper)</th>
+                    <th>ระดับผลกระทบ (Impact Level)</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td><span class="domain-badge bg-edu"><i class="fa-solid fa-graduation-cap"></i> Education & Pedagogy</span></td>
-                    <td>106</td>
-                    <td>96</td>
                     <td><strong>202</strong></td>
                     <td>
                         <div style="display:flex; align-items:center; gap:8px;">
@@ -363,11 +360,10 @@
                         </div>
                     </td>
                     <td><strong style="color:#10b981;">10.78</strong></td>
+                    <td><span style="color:#10b981; font-weight:bold;">สูงมาก (Very High)</span></td>
                 </tr>
                 <tr>
                     <td><span class="domain-badge bg-tech"><i class="fa-solid fa-microchip"></i> Core AI, ML & Computer Science</span></td>
-                    <td>71</td>
-                    <td>52</td>
                     <td><strong>123</strong></td>
                     <td>
                         <div style="display:flex; align-items:center; gap:8px;">
@@ -376,11 +372,10 @@
                         </div>
                     </td>
                     <td><strong>5.56</strong></td>
+                    <td><span style="color:#3b82f6; font-weight:bold;">ปานกลาง-สูง (Moderate-High)</span></td>
                 </tr>
                 <tr>
-                    <td><span class="domain-badge bg-biz"><i class="fa-solid fa-briefcase"></i> Business, Management & Logistics</span></td>
-                    <td>25</td>
-                    <td>76</td>
+                    <td><span class="domain-badge bg-mkt"><i class="fa-solid fa-bullhorn"></i> AI & Digital Marketing / Business</span></td>
                     <td><strong>101</strong></td>
                     <td>
                         <div style="display:flex; align-items:center; gap:8px;">
@@ -389,11 +384,10 @@
                         </div>
                     </td>
                     <td><strong>5.36</strong></td>
+                    <td><span style="color:#f59e0b; font-weight:bold;">ปานกลาง (Moderate)</span></td>
                 </tr>
                 <tr>
                     <td><span class="domain-badge bg-med"><i class="fa-solid fa-stethoscope"></i> Healthcare & Medicine</span></td>
-                    <td>65</td>
-                    <td>45</td>
                     <td><strong>110</strong></td>
                     <td>
                         <div style="display:flex; align-items:center; gap:8px;">
@@ -402,11 +396,10 @@
                         </div>
                     </td>
                     <td><strong style="color:#10b981;">10.67</strong></td>
+                    <td><span style="color:#10b981; font-weight:bold;">สูงมาก (Very High)</span></td>
                 </tr>
                 <tr>
                     <td><span class="domain-badge bg-eng"><i class="fa-solid fa-gears"></i> Engineering & Industry</span></td>
-                    <td>21</td>
-                    <td>13</td>
                     <td><strong>34</strong></td>
                     <td>
                         <div style="display:flex; align-items:center; gap:8px;">
@@ -415,11 +408,10 @@
                         </div>
                     </td>
                     <td><strong>3.08</strong></td>
+                    <td><span style="color:#64748b; font-weight:bold;">เฉพาะทาง (Specialized)</span></td>
                 </tr>
                 <tr>
                     <td><span class="domain-badge bg-eth"><i class="fa-solid fa-scale-balanced"></i> Ethics, Policy & Social Impact</span></td>
-                    <td>12</td>
-                    <td>18</td>
                     <td><strong>30</strong></td>
                     <td>
                         <div style="display:flex; align-items:center; gap:8px;">
@@ -428,6 +420,7 @@
                         </div>
                     </td>
                     <td><strong>6.83</strong></td>
+                    <td><span style="color:#db2777; font-weight:bold;">สูง (High)</span></td>
                 </tr>
             </tbody>
         </table>
@@ -436,30 +429,24 @@
 
 <script>
     // 1. Domain Distribution Chart
-    const ctxCompare = document.getElementById('domainCompareChart').getContext('2d');
-    new Chart(ctxCompare, {
+    const ctxDist = document.getElementById('domainDistributionChart').getContext('2d');
+    new Chart(ctxDist, {
         type: 'bar',
         data: {
-            labels: ['Education', 'Core AI & ML', 'Healthcare', 'Business & Logistics', 'Engineering', 'Ethics & Policy'],
+            labels: ['Education & Pedagogy', 'Core AI & ML', 'Healthcare & Medicine', 'AI & Digital Marketing', 'Engineering', 'Ethics & Policy'],
             datasets: [
                 {
-                    label: 'ไฟล์ที่ 1 (300 เรื่อง)',
-                    data: [106, 71, 65, 25, 21, 12],
-                    backgroundColor: '#3b82f6',
-                    borderRadius: 6
-                },
-                {
-                    label: 'ไฟล์ที่ 2 (300 เรื่อง)',
-                    data: [96, 52, 45, 76, 13, 18],
-                    backgroundColor: '#10b981',
-                    borderRadius: 6
+                    label: 'จำนวนงานวิจัย (บทความ)',
+                    data: [202, 123, 110, 101, 34, 30],
+                    backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#0891b2', '#db2777'],
+                    borderRadius: 8
                 }
             ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { position: 'top' } },
+            plugins: { legend: { display: false } },
             scales: { y: { beginAtZero: true } }
         }
     });
@@ -469,17 +456,17 @@
     new Chart(ctxRadar, {
         type: 'radar',
         data: {
-            labels: ['Education & Pedagogy', 'Core AI & Computer Science', 'Healthcare & Medicine', 'Business & Logistics', 'Engineering', 'Ethics & Policy'],
+            labels: ['Education & Pedagogy', 'Core AI & CS', 'Healthcare & Medicine', 'AI & Digital Marketing', 'Engineering', 'Ethics & Policy'],
             datasets: [{
-                label: 'สัดส่วนจำนวนงานวิจัยรวม (600 เรื่อง)',
+                label: 'สัดส่วนขอบเขตการวิจัย',
                 data: [202, 123, 110, 101, 34, 30],
                 fill: true,
-                backgroundColor: 'rgba(139, 92, 246, 0.2)',
-                borderColor: '#8b5cf6',
-                pointBackgroundColor: '#8b5cf6',
+                backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                borderColor: '#3b82f6',
+                pointBackgroundColor: '#3b82f6',
                 pointBorderColor: '#fff',
                 pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: '#8b5cf6'
+                pointHoverBorderColor: '#3b82f6'
             }]
         },
         options: {
@@ -494,7 +481,7 @@
     new Chart(ctxCite, {
         type: 'bar',
         data: {
-            labels: ['Education & Pedagogy', 'Healthcare & Medicine', 'Ethics & Policy', 'Core AI & ML', 'Business & Logistics', 'Engineering'],
+            labels: ['Education & Pedagogy', 'Healthcare & Medicine', 'Ethics & Policy', 'Core AI & ML', 'AI & Digital Marketing', 'Engineering'],
             datasets: [{
                 label: 'การอ้างอิงเฉลี่ยต่อบทความ (Citations / Paper)',
                 data: [10.78, 10.67, 6.83, 5.56, 5.36, 3.08],
@@ -523,10 +510,10 @@
     new Chart(ctxKw, {
         type: 'doughnut',
         data: {
-            labels: ['Generative AI / ChatGPT', 'Higher Education / Students', 'Medical & ICU AI', 'Machine Learning / DL', 'Industry 4.0 & Warehouse', 'Ethics & Trust'],
+            labels: ['AI & Digital Marketing / E-Commerce', 'Generative AI / ChatGPT', 'Higher Education', 'Medical AI', 'Machine Learning / DL', 'Ethics & Trust'],
             datasets: [{
-                data: [52, 40, 35, 63, 28, 23],
-                backgroundColor: ['#3b82f6', '#0891b2', '#10b981', '#8b5cf6', '#f59e0b', '#db2777']
+                data: [101, 52, 40, 35, 63, 23],
+                backgroundColor: ['#f59e0b', '#3b82f6', '#0891b2', '#10b981', '#8b5cf6', '#db2777']
             }]
         },
         options: {
