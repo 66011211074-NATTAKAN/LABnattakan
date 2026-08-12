@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scopus Bibliometric Data Visualization</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto space-y-8">
+        
+        <!-- Header -->
+        <header class="bg-gradient-to-r from-slate-900 to-indigo-900 text-white rounded-2xl p-6 md:p-8 shadow-xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <span class="bg-indigo-500/30 text-indigo-200 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider border border-indigo-400/30">Bibliometric Dashboard</span>
+                    <h1 class="text-2xl md:text-4xl font-bold mt-2">รายงานวิเคราะห์ข้อมูลวิจัย Scopus</h1>
+                    <p class="text-slate-300 text-sm md:text-base mt-1">สรุปและแสดงผลเชิงทัศน์จากเอกสารวิชาการจำนวน 600 รายการ</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-xl border border-white/10 text-right">
+                    <span class="text-xs text-slate-300 block">จำนวนเอกสารทั้งหมด</span>
+                    <span class="text-3xl font-extrabold text-indigo-300">600</span> <span class="text-xs text-slate-300">รายการ</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-medium text-slate-500 uppercase">ปีที่มีงานวิจัยสูงสุด</p>
+                    <p class="text-2xl font-bold text-slate-800 mt-1">2025</p>
+                    <p class="text-xs text-emerald-600 mt-1">300 บทความ (50%)</p>
+                </div>
+                <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center font-bold text-xl">
+                    📅
+                </div>
+            </div>
+            
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-medium text-slate-500 uppercase">ประเภทเอกสารหลัก</p>
+                    <p class="text-2xl font-bold text-slate-800 mt-1">Article</p>
+                    <p class="text-xs text-indigo-600 mt-1">84.3% ของทั้งหมด</p>
+                </div>
+                <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center font-bold text-xl">
+                    📄
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-medium text-slate-500 uppercase">หัวข้อหลัก (Top Keyword)</p>
+                    <p class="text-2xl font-bold text-slate-800 mt-1">AI</p>
+                    <p class="text-xs text-purple-600 mt-1">181 บทความเกี่ยวข้อง</p>
+                </div>
+                <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center font-bold text-xl">
+                    🤖
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-medium text-slate-500 uppercase">สัดส่วน Open Access</p>
+                    <p class="text-2xl font-bold text-slate-800 mt-1">69.8%</p>
+                    <p class="text-xs text-blue-600 mt-1">419 บทความเข้าถึงฟรี</p>
+                </div>
+                <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center font-bold text-xl">
+                    🔓
+                </div>
+            </div>
+        </div>
+
+        <!-- Visualizations Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- Chart 1: Year Trend -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-800">แนวโน้มการตีพิมพ์รายปี (Publication Trend)</h2>
+                        <p class="text-xs text-slate-500">จำนวนผลงานวิจัยที่ตีพิมพ์ระหว่างปี 2025 - 2027</p>
+                    </div>
+                </div>
+                <div class="h-64">
+                    <canvas id="yearChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Chart 2: Document Type -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-800">สัดส่วนประเภทเอกสาร (Document Types)</h2>
+                        <p class="text-xs text-slate-500">จำแนกตามรูปแบบผลงานทางวิชาการ</p>
+                    </div>
+                </div>
+                <div class="h-64 flex justify-center items-center">
+                    <canvas id="docTypeChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Chart 3: Top Keywords -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-800">10 คำสำคัญยอดนิยม (Top Author Keywords)</h2>
+                        <p class="text-xs text-slate-500">หัวข้อวิจัยที่ถูกระบุบ่อยที่สุดในบทความ</p>
+                    </div>
+                </div>
+                <div class="h-80">
+                    <canvas id="keywordChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Chart 4: Top Sources -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-800">10 แหล่งตีพิมพ์สูงสุด (Top Publication Sources)</h2>
+                        <p class="text-xs text-slate-500">วารสารและงานประชุมวิชาการที่มีจำนวนตีพิมพ์มากที่สุด</p>
+                    </div>
+                </div>
+                <div class="h-80">
+                    <canvas id="sourceChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Top Cited Papers Table -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+            <div class="p-6 border-b border-slate-100">
+                <h2 class="text-lg font-bold text-slate-800">บทความที่ได้รับการอ้างอิงสูงสุด (Top 5 Most Cited Papers)</h2>
+                <p class="text-xs text-slate-500">บทความวิจัยที่ถูกนำไปอ้างอิงอิงสูงสุดในชุดข้อมูลนี้</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-600">
+                    <thead class="bg-slate-50 text-slate-700 font-semibold uppercase text-xs border-b border-slate-100">
+                        <tr>
+                            <th class="py-3 px-6">ชื่อบทความ (Title)</th>
+                            <th class="py-3 px-6">ผู้เขียน (Authors)</th>
+                            <th class="py-3 px-6">วารสาร (Source Title)</th>
+                            <th class="py-3 px-6 text-center">ปี</th>
+                            <th class="py-3 px-6 text-center">การอ้างอิง (Citations)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-4 px-6 font-medium text-slate-800 max-w-md">Digital Transformation of Food Supply Chain Management Using Blockchain: A Systematic Literature Review Towards Food Safety and Traceability</td>
+                            <td class="py-4 px-6 text-xs text-slate-500 max-w-xs truncate">Vasileiou M.; Kyrgiakos L.S.; Kleisiari C.; Lappas P.Z.; Tsinopoulos C.; Kleftodimos G.; Ntemou A.; Kateris D.; Moulogianni C.; Vlontzos G.</td>
+                            <td class="py-4 px-6 italic text-slate-600">Business and Information Systems Engineering</td>
+                            <td class="py-4 px-6 text-center">2026</td>
+                            <td class="py-4 px-6 text-center">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700">
+                                    33
+                                </span>
+                            </td>
+                        </tr>
+    
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-4 px-6 font-medium text-slate-800 max-w-md">Artificial intelligence for information-driven resilience: Enhancing strategic adaptation and entrepreneurial success</td>
+                            <td class="py-4 px-6 text-xs text-slate-500 max-w-xs truncate">Wang S.; Zhang H.</td>
+                            <td class="py-4 px-6 italic text-slate-600">International Journal of Information Management</td>
+                            <td class="py-4 px-6 text-center">2026</td>
+                            <td class="py-4 px-6 text-center">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700">
+                                    24
+                                </span>
+                            </td>
+                        </tr>
+    
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-4 px-6 font-medium text-slate-800 max-w-md">Generative AI and Literacy Development in the Language Classroom: A Systematic Review of Literature</td>
+                            <td class="py-4 px-6 text-xs text-slate-500 max-w-xs truncate">Chandel P.; Lim F.V.</td>
+                            <td class="py-4 px-6 italic text-slate-600">Ubiquitous Learning</td>
+                            <td class="py-4 px-6 text-center">2025</td>
+                            <td class="py-4 px-6 text-center">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700">
+                                    23
+                                </span>
+                            </td>
+                        </tr>
+    
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-4 px-6 font-medium text-slate-800 max-w-md">Personalized colorectal cancer risk assessment through explainable AI and Gut microbiome profiling</td>
+                            <td class="py-4 px-6 text-xs text-slate-500 max-w-xs truncate">Novielli P.; Baldi S.; Romano D.; Magarelli M.; Diacono D.; Di Bitonto P.; Nannini G.; Di Gloria L.; Bellotti R.; Amedei A.; Tangaro S.</td>
+                            <td class="py-4 px-6 italic text-slate-600">Gut Microbes</td>
+                            <td class="py-4 px-6 text-center">2025</td>
+                            <td class="py-4 px-6 text-center">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700">
+                                    19
+                                </span>
+                            </td>
+                        </tr>
+    
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-4 px-6 font-medium text-slate-800 max-w-md">Agentic information systems</td>
+                            <td class="py-4 px-6 text-xs text-slate-500 max-w-xs truncate">Holldack F.; Banh L.; Strobel G.</td>
+                            <td class="py-4 px-6 italic text-slate-600">Electronic Markets</td>
+                            <td class="py-4 px-6 text-center">2026</td>
+                            <td class="py-4 px-6 text-center">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700">
+                                    13
+                                </span>
+                            </td>
+                        </tr>
+    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center text-xs text-slate-400 py-4">
+            สร้างขึ้นโดยอัตโนมัติจากข้อมูล Scopus Export • Data Visualization Dashboard
+        </footer>
+
+    </div>
+
+    <!-- Chart Configuration Script -->
+    <script>
+        // Data from Python
+        const yearLabels = ["2025", "2026", "2027"];
+        const yearData = [300, 294, 6];
+
+        const docLabels = ["Article", "Conference paper", "Review", "Note"];
+        const docData = [506, 56, 36, 2];
+
+        const kwLabels = ["Artificial Intelligence", "Machine Learning", "Artificial Intelligence (Ai)", "Deep Learning", "Generative Ai", "Generative Artificial Intelligence", "Chatgpt", "Explainable Ai", "Ai", "Higher Education"];
+        const kwData = [181, 37, 36, 27, 25, 19, 14, 13, 13, 12];
+
+        const srcLabels = ["Discover Artificial Intelligen...", "ShodhKosh: Journal of Visual a...", "International Journal of Advan...", "Engineering Research Express", "Computers in Human Behavior", "ICMHI 2025 - 2025 9th Internat...", "Journal of Medical Artificial ...", "International Journal of Infor...", "Electronic Markets", "npj Digital Medicine"];
+        const srcData = [39, 29, 27, 20, 15, 15, 14, 13, 13, 13];
+
+        // 1. Year Chart
+        new Chart(document.getElementById('yearChart'), {
+            type: 'bar',
+            data: {
+                labels: yearLabels,
+                datasets: [{
+                    label: 'จำนวนบทความ',
+                    data: yearData,
+                    backgroundColor: '#6366f1',
+                    borderRadius: 8,
+                    barThickness: 40
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // 2. Doc Type Chart
+        new Chart(document.getElementById('docTypeChart'), {
+            type: 'doughnut',
+            data: {
+                labels: docLabels,
+                datasets: [{
+                    data: docData,
+                    backgroundColor: ['#6366f1', '#10b981', '#f59e0b', '#ec4899']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // 3. Keyword Chart
+        new Chart(document.getElementById('keywordChart'), {
+            type: 'bar',
+            data: {
+                labels: kwLabels,
+                datasets: [{
+                    label: 'ความถี่ (Frequency)',
+                    data: kwData,
+                    backgroundColor: '#8b5cf6',
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+
+        // 4. Source Chart
+        new Chart(document.getElementById('sourceChart'), {
+            type: 'bar',
+            data: {
+                labels: srcLabels,
+                datasets: [{
+                    label: 'จำนวนบทความ',
+                    data: srcData,
+                    backgroundColor: '#06b6d4',
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
